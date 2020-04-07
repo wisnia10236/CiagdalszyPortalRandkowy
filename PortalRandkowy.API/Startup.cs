@@ -35,6 +35,8 @@ namespace PortalRandkowy.API
             services.AddCors();
             services.AddTransient<Seed>(); // dodanie testowych wartosci do db
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IGenericRepository, GenericRepository>(); // rejestrowanie wstrzykiwania jezeli uzyjemy interfejsu to z automatu wstrzykanie nam klase jakas tam ktora jest podana
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(options =>
                         {
