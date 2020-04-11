@@ -15,6 +15,8 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace PortalRandkowy.API
 {
@@ -31,21 +33,34 @@ namespace PortalRandkowy.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc();
+            services.AddMvc().AddMvcOptions(opt =>
+                {
+                    opt.EnableEndpointRouting = false;
+                })
+                .AddNewtonsoftJson(opt =>
+                {
+                    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
             services.AddCors();
             services.AddTransient<Seed>(); // dodanie testowych wartosci do db
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IGenericRepository, GenericRepository>(); // rejestrowanie wstrzykiwania jezeli uzyjemy interfejsu to z automatu wstrzykanie nam klase jakas tam ktora jest podana
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                         .AddJwtBearer(options =>
                         {
+                            options.RequireHttpsMetadata = false;
+                            options.SaveToken = true;
                             options.TokenValidationParameters = new TokenValidationParameters
                             {
                                 ValidateIssuerSigningKey = true,
                                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                                 ValidateIssuer = false,
-                                ValidateAudience = false
+                                ValidateAudience = false,
+                                ValidateLifetime = true
                             };
                         });
         }
@@ -59,15 +74,21 @@ namespace PortalRandkowy.API
             }
 
             seeder.SeedUsers();
-            app.UseHttpsRedirection();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
+
+
             app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseRouting();
+            app.UseMvc();
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
             });
         }
     }
