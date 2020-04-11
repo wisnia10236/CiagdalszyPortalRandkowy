@@ -17,6 +17,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using AutoMapper;
+using Microsoft.AspNetCore.Server.IISIntegration;
 
 namespace PortalRandkowy.API
 {
@@ -42,6 +44,7 @@ namespace PortalRandkowy.API
                     opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
             services.AddCors();
+            services.AddAutoMapper(typeof(Startup)); // dodanie automappera
             services.AddTransient<Seed>(); // dodanie testowych wartosci do db
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IGenericRepository, GenericRepository>(); // rejestrowanie wstrzykiwania jezeli uzyjemy interfejsu to z automatu wstrzykanie nam klase jakas tam ktora jest podana
@@ -49,6 +52,7 @@ namespace PortalRandkowy.API
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
                         .AddJwtBearer(options =>
                         {
@@ -62,7 +66,8 @@ namespace PortalRandkowy.API
                                 ValidateAudience = false,
                                 ValidateLifetime = true
                             };
-                        });
+                        })
+                        .AddNegotiate();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,13 +80,9 @@ namespace PortalRandkowy.API
 
             seeder.SeedUsers();
 
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-
-
-
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseRouting();
             app.UseMvc();
 
 
@@ -90,6 +91,14 @@ namespace PortalRandkowy.API
                 endpoints.MapControllers();
 
             });
+
+
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
+            app.UseHttpsRedirection();
+
+
+
         }
     }
 }
