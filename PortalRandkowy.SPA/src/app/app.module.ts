@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { JwtModule } from "@auth0/angular-jwt";
+import { RouterModule } from "@angular/router";
 
 import { AppComponent } from "./app.component";
 import { NavComponent } from "./nav/nav.component";
@@ -12,6 +13,9 @@ import { RegisterComponent } from "./register/register.component";
 import { AlertifyService } from "./_services/alertify.service";
 import { UserService } from "./_services/user.service";
 import { UsereListComponent } from "./users/usere-list/usere-list.component";
+import { LikesComponent } from "./likes/likes.component";
+import { MessagesComponent } from "./messages/messages.component";
+import { appRoutes } from "./routes";
 
 export function tokenGetter() {
   //tworzymy funkcje aby appmodul odrazu pobral token zebysmy pozniej nie musieli go pobierac z innych metod + dodac do import jwtmodule
@@ -25,6 +29,8 @@ export function tokenGetter() {
     HomeComponent,
     RegisterComponent,
     UsereListComponent,
+    LikesComponent,
+    MessagesComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,6 +43,7 @@ export function tokenGetter() {
         blacklistedRoutes: ["localhost:5000/api/auth"],
       },
     }),
+    RouterModule.forRoot(appRoutes),
   ],
   providers: [AuthService, AlertifyService, UserService],
   bootstrap: [AppComponent],
