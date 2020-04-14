@@ -79,7 +79,7 @@ namespace PortalRandkowy.API
             }
 
             seeder.SeedUsers();
-
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
