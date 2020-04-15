@@ -7,17 +7,17 @@ import { AuthGuard } from "./_guards/auth.guard";
 
 export const appRoutes: Routes = [
   // dodajemy do tablicy routingu okreslone przyporzadkowanie np strony z polubieniami ma pobierac component likescomponent
-  { path: "home", component: HomeComponent },
+  { path: "", component: HomeComponent },
+
   {
-    path: "uzytkownicy",
-    component: UsereListComponent,
+    path: "", // zabezpieczenie , robimy jako podrzedne strony (children)
+    runGuardsAndResolvers: "always",
     canActivate: [AuthGuard],
+    children: [
+      { path: "uzytkownicy", component: UsereListComponent },
+      { path: "polubienia", component: LikesComponent },
+      { path: "wiadomosci", component: MessagesComponent },
+    ],
   },
-  { path: "polubienia", component: LikesComponent, canActivate: [AuthGuard] },
-  {
-    path: "wiadomosci",
-    component: MessagesComponent,
-    canActivate: [AuthGuard],
-  },
-  { path: "**", redirectTo: "home", pathMatch: "full" },
+  { path: "**", redirectTo: "", pathMatch: "full" },
 ];
