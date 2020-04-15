@@ -16,6 +16,7 @@ import { UsereListComponent } from "./users/usere-list/usere-list.component";
 import { LikesComponent } from "./likes/likes.component";
 import { MessagesComponent } from "./messages/messages.component";
 import { appRoutes } from "./routes";
+import { AuthGuard } from "./_guards/auth.guard";
 
 export function tokenGetter() {
   //tworzymy funkcje aby appmodul odrazu pobral token zebysmy pozniej nie musieli go pobierac z innych metod + dodac do import jwtmodule
@@ -45,7 +46,7 @@ export function tokenGetter() {
     }),
     RouterModule.forRoot(appRoutes),
   ],
-  providers: [AuthService, AlertifyService, UserService],
+  providers: [AuthService, AlertifyService, UserService, AuthGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
