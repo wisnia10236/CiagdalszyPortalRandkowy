@@ -25,7 +25,7 @@ export class NavComponent implements OnInit {
         this.alertify.success("Zalogowałeś sie do aplikacji");
       },
       (error) => {
-        this.alertify.error("Wystąpił błąd logowania");
+        this.alertify.error(error);
       },
       () => {
         // deklarujemy niewiadoma zmienna aby po akceptacji wywolac ja czyli nawigowac po kliknieciu do strony /uzytkownicy

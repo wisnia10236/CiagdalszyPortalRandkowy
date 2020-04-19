@@ -106,7 +106,7 @@ namespace PortalRandkowy.API
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseMvc();
-
+            app.UseStatusCodePages();
 
             app.UseEndpoints(endpoints =>
             {

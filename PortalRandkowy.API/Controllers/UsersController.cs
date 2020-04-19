@@ -29,7 +29,6 @@ namespace PortalRandkowy.API.Controllers
         public async Task<IActionResult> GetUsers()
         {
 
-            throw new System.Exception("generujemy recznie bład");
 
             var users = await _repo.GetUsers();
 
