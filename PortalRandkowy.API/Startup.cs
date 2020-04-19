@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +20,9 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using AutoMapper;
 using Microsoft.AspNetCore.Server.IISIntegration;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using PortalRandkowy.API.Helpers;
 
 namespace PortalRandkowy.API
 {
@@ -73,9 +77,27 @@ namespace PortalRandkowy.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seed seeder)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment())        // tryb developerski
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else        // trub produkcyjny
+            {
+                app.UseExceptionHandler(builder =>
+                {
+                    builder.Run(async context =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;      // wygenerowanie statusu z kodu na cyfre
+
+                        var error = context.Features.Get<IExceptionHandlerFeature>();       // pobieramy z kontextu jakie sa bledy
+
+                        if (error != null)       // jesli sa bledy to podajemy je
+                        {
+                            context.Response.AddAplicationError(error.Error.Message);
+                            await context.Response.WriteAsync(error.Error.Message);
+                        }
+                    });
+                }); // globalna obsluga bledow dla produkcji
             }
 
             seeder.SeedUsers();

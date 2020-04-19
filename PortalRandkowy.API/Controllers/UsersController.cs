@@ -1,6 +1,6 @@
-using System.Net.Mail;
-using System.Net;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -25,26 +25,17 @@ namespace PortalRandkowy.API.Controllers
             _mapper = mapper;
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> GetUsers()
-        {   
-            try
-            {
-                throw new System.Exception("generujemy recznie bład");
-            
+        {
+
+            throw new System.Exception("generujemy recznie bład");
 
             var users = await _repo.GetUsers();
 
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users); //mapujemy z listy users do kolekcji UserForLIstDto aby wyswietlal nam liste userów
 
             return Ok(usersToReturn);
-            }
-            catch (System.Exception)
-            {
-                return StatusCode(500,"wyjatek");
-            }
         }
 
         [HttpGet("{id}")]
@@ -57,5 +48,4 @@ namespace PortalRandkowy.API.Controllers
             return Ok(userToReturn);
         }
     }
-
 }
