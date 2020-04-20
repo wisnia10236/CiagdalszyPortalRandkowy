@@ -20,6 +20,7 @@ import { MessagesComponent } from "./messages/messages.component";
 import { appRoutes } from "./routes";
 import { AuthGuard } from "./_guards/auth.guard";
 import { ErrorInterceptorProvider } from "./_services/error.interceptor";
+import { UserCardComponent } from "./users/user-card/user-card.component";
 
 export function tokenGetter() {
   //tworzymy funkcje aby appmodul odrazu pobral token zebysmy pozniej nie musieli go pobierac z innych metod + dodac do import jwtmodule
@@ -35,6 +36,8 @@ export function tokenGetter() {
     UsereListComponent,
     LikesComponent,
     MessagesComponent,
+    UserCardComponent,
+    UserCardComponent,
   ],
   imports: [
     BrowserModule,
