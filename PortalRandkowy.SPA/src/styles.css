@@ -4,3 +4,52 @@
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
 @import '../node_modules/bootswatch/dist/solar/bootstrap.min.css';
+
+
+.tab-panel{
+  border: 1px solid white;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.nav-tabs > li.open, .user-tabset > .nav-tabs > li:hover{
+  border-bottom: 4px solid #fbcdcf;
+}
+
+.user-tabset > .nav-tabs > li.open > a, .user-tabset > .nav-tabs > li:hover > a{
+  border:0;
+  background: none !important;
+  color: #fdfdfd;
+}
+
+.user-tabset > .nav-tabs > li.open > a > i, .user-tabset > .nav-tabs > li:hover > a > i{
+  color : #a6a6a6;
+}
+
+.user-tabset > .nav-tabs > li.open .dropdown-menu,  .user-tabset > .nav-tabs > li:hover .dropdown-menu{
+  margin-top: 0px;
+}
+
+.user-tabset > .nav-tabs > li.active{
+  border-bottom: 4ox solid rosybrown;
+  position: relative;
+}
+
+.user-tabset > .nav-tabs > li.active > a {
+  border: 0 !important;
+  color: #fdfdfd;
+}
+
+.user-tabset > .nav-tabs > li.active > a > i {
+  color : #beb9b9;
+}
+
+.user-tabset > .tab-content {
+  margin-top: -3px;
+
+  border: 0;
+  border-top: 1 px solid whitesmoke;
+  padding: 15px 0;
+}
+
+
