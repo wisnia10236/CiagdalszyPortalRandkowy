@@ -1,35 +1,38 @@
-import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
-import { HttpClientModule } from "@angular/common/http";
-import { FormsModule } from "@angular/forms";
-import { JwtModule } from "@auth0/angular-jwt";
-import { RouterModule } from "@angular/router";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { JwtModule } from '@auth0/angular-jwt';
+import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NgxGalleryModule } from 'ngx-gallery';
 
-import { AppComponent } from "./app.component";
-import { NavComponent } from "./nav/nav.component";
-import { AuthService } from "./_services/auth.service";
-import { HomeComponent } from "./home/home.component";
-import { RegisterComponent } from "./register/register.component";
-import { AlertifyService } from "./_services/alertify.service";
-import { UserService } from "./_services/user.service";
-import { UsereListComponent } from "./users/usere-list/usere-list.component";
-import { LikesComponent } from "./likes/likes.component";
-import { MessagesComponent } from "./messages/messages.component";
-import { appRoutes } from "./routes";
-import { AuthGuard } from "./_guards/auth.guard";
-import { ErrorInterceptorProvider } from "./_services/error.interceptor";
-import { UserCardComponent } from "./users/user-card/user-card.component";
+import { AppComponent } from './app.component';
+import { NavComponent } from './nav/nav.component';
+import { AuthService } from './_services/auth.service';
+import { HomeComponent } from './home/home.component';
+import { RegisterComponent } from './register/register.component';
+import { AlertifyService } from './_services/alertify.service';
+import { UserService } from './_services/user.service';
+import { UsereListComponent } from './users/usere-list/usere-list.component';
+import { LikesComponent } from './likes/likes.component';
+import { MessagesComponent } from './messages/messages.component';
+import { appRoutes } from './routes';
+import { AuthGuard } from './_guards/auth.guard';
+import { ErrorInterceptorProvider } from './_services/error.interceptor';
+import { UserCardComponent } from './users/user-card/user-card.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UserDetailResolver } from './_resolvers/user-detail.resolver';
 import { UserListResolver } from './_resolvers/user-list.resolver';
+import { UserEditComponent } from './users/user-edit/user-edit.component';
+import { UserEditResolver } from './_resolvers/user-edit.resolver';
+
 
 export function tokenGetter() {
   //tworzymy funkcje aby appmodul odrazu pobral token zebysmy pozniej nie musieli go pobierac z innych metod + dodac do import jwtmodule
-  return localStorage.getItem("token");
+  return localStorage.getItem('token');
 }
 
 export class CustomHammerConfig extends HammerGestureConfig  {
@@ -51,6 +54,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     UserCardComponent,
     UserCardComponent,
     UserDetailComponent,
+    UserEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,15 +63,16 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        whitelistedDomains: ["localhost:5000"],
-        blacklistedRoutes: ["localhost:5000/api/auth"],
+        whitelistedDomains: ['localhost:5000'],
+        blacklistedRoutes: ['localhost:5000/api/auth'],
       },
     }),
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot((appRoutes),{relativeLinkResolution: 'corrected'}),
     BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     NgxGalleryModule,
+    [RouterModule.forChild(appRoutes)],
   ],
   providers: [
     AuthService,
@@ -77,8 +82,10 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     ErrorInterceptorProvider,
     UserDetailResolver,
     UserListResolver,
-    { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
+    UserEditResolver,
+    { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
   ],
   bootstrap: [AppComponent],
+  exports: [RouterModule]
 })
 export class AppModule {}
