@@ -28,10 +28,11 @@ import { UserDetailResolver } from './_resolvers/user-detail.resolver';
 import { UserListResolver } from './_resolvers/user-list.resolver';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { UserEditResolver } from './_resolvers/user-edit.resolver';
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 
 
 export function tokenGetter() {
-  //tworzymy funkcje aby appmodul odrazu pobral token zebysmy pozniej nie musieli go pobierac z innych metod + dodac do import jwtmodule
+  // tworzymy funkcje aby appmodul odrazu pobral token zebysmy pozniej nie musieli go pobierac z innych metod + dodac do import jwtmodule
   return localStorage.getItem('token');
 }
 
@@ -83,6 +84,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     UserDetailResolver,
     UserListResolver,
     UserEditResolver,
+    PreventUnsavedChanges,
     { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
   ],
   bootstrap: [AppComponent],
