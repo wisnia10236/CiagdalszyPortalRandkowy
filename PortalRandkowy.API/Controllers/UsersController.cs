@@ -63,7 +63,7 @@ namespace PortalRandkowy.API.Controllers
                 return NoContent();
             }
             
-            throw new Exception($"Aktualizacja uzytkownika o id: {id} nie powiodla sie przy zapisywaniu do bazy");
+            throw new Exception($"Aktualizacja uzytkownika o id: {id} nie powiodla sie przy zapisywaniu do bazy danych");
         }
 
 
