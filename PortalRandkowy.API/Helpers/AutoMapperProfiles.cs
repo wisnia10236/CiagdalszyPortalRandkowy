@@ -28,6 +28,7 @@ namespace PortalRandkowy.API.Helpers
                         opt.MapFrom(src => src.DateOfBirth.CalculateAge());             // stworzona klasa aby liczyla wiek
                     });
             CreateMap<Photo, PhotosForDetailedDto>();
+            CreateMap<UserForUpdateDto,User>();
         }
 
     }
