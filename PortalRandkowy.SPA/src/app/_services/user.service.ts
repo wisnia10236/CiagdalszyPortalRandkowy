@@ -23,7 +23,7 @@ export class UserService {
 
   updateUser(id: number, user: User)
   {
-    return this.http.put(this.baseUrl + 'users/' + id , user);   // przekazyjemy dla adresu ... zmiany z api
+    return this.http.put(this.baseUrl + 'users/' + id , user);   // przekazyjemy dla adresu ... zmiany z appii
   }
 
 }
