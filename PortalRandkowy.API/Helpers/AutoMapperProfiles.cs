@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using PortalRandkowy.API.Dtos;
@@ -31,5 +32,26 @@ namespace PortalRandkowy.API.Helpers
             CreateMap<UserForUpdateDto,User>();
         }
 
+        public override string ProfileName => base.ProfileName;
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
+        private string GetDebuggerDisplay()
+        {
+            return this.ToString();
+        }
     }
 }

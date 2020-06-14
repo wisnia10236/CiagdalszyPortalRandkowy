@@ -53,6 +53,7 @@ namespace PortalRandkowy.API
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IGenericRepository, GenericRepository>(); // rejestrowanie wstrzykiwania jezeli uzyjemy interfejsu to z automatu wstrzykanie nam klase jakas tam ktora jest podana
             services.AddScoped<IUserRepository, UserRepository>();
+            services.Configure<ClaudinarySettings>(Configuration.GetSection("ClaudinarySettings"));  // dodajemy konfig dla claoudinary settings dla sekscji w appsetings ClaudinarySett...
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
