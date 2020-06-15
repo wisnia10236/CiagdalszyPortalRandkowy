@@ -30,28 +30,8 @@ namespace PortalRandkowy.API.Helpers
                     });
             CreateMap<Photo, PhotosForDetailedDto>();
             CreateMap<UserForUpdateDto,User>();
-        }
-
-        public override string ProfileName => base.ProfileName;
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-
-        private string GetDebuggerDisplay()
-        {
-            return this.ToString();
+            CreateMap<Photo, PhotoForReturnDto>();
+            CreateMap<PhotoForCreationDto,Photo>();
         }
     }
 }

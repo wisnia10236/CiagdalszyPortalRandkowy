@@ -75,9 +75,23 @@ namespace PortalRandkowy.API.Controllers
             userFromRepo.Photos.Add(photo);             //zapisujemy w bazie
 
             if (await _repository.SaveAll())
-                return Ok();
+            {
+                var photoToReturn = _mapper.Map<PhotoForReturnDto>(photo);              //mapujemy z photoforreturndto do photo
+                return CreatedAtRoute("GetPhoto", new { id = photo.Id}, photoToReturn);     //zwara ze zostalo utworzone oraz informacje o nim get photo to jest abysmy dostali info o niej         
+            }
                 
             return BadRequest("Nie można dodać zdjęcia");
+        }
+
+
+        [HttpGet("{id}", Name = "GetPhoto")]    
+        public async Task<IActionResult> GetPhoto(int id)
+        {
+            var PhotoFromRepo = await _repository.GetPhoto(id);  // z repozytorium pobieramy zdjecie przez metode
+
+            var photoForReturn = _mapper.Map<PhotoForReturnDto>(PhotoFromRepo);         //mapujemy z PhotoForReturnDto na PhotoFromRepo
+
+            return Ok(photoForReturn);
         }
 
     }
