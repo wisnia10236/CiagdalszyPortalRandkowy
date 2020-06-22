@@ -41,8 +41,7 @@ namespace PortalRandkowy.API.Controllers
         }
 
         [HttpPost]
-        [System.Obsolete]
-        public async Task<IActionResult> AddPhotoForUser(int userId, PhotoForCreationDto PhotoForCreationDto)
+        public async Task<IActionResult> AddPhotoForUser(int userId, [FromForm] PhotoForCreationDto PhotoForCreationDto)
         {
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))       // sprawdzamy czy zgadza sie user(sprawdzamy czy id jest rowny)
                 return Unauthorized();
@@ -64,7 +63,7 @@ namespace PortalRandkowy.API.Controllers
                 }
             }
 
-            PhotoForCreationDto.Url = uploadResult.Uri.ToString();      //dla dto jak przekazujemy url z claudinary 
+            PhotoForCreationDto.Url = uploadResult.Url.ToString();     //dla dto jak przekazujemy url z claudinary 
             PhotoForCreationDto.publicId = uploadResult.PublicId;
 
             var photo = _mapper.Map<Photo>(PhotoForCreationDto);        //mapujemy zmiany na bazie z photoForCreationDto  na photo
@@ -77,7 +76,8 @@ namespace PortalRandkowy.API.Controllers
             if (await _repository.SaveAll())
             {
                 var photoToReturn = _mapper.Map<PhotoForReturnDto>(photo);              //mapujemy z photoforreturndto do photo
-                return CreatedAtRoute("GetPhoto", new { id = photo.Id}, photoToReturn);     //zwara ze zostalo utworzone oraz informacje o nim get photo to jest abysmy dostali info o niej         
+                return CreatedAtRoute(nameof(GetPhoto), new { userId, id = photo.Id},photoToReturn);     //przesyla dla routa "getphoto" aby utworzyc nowy rekord w bazie , dla photo to return
+                // wysylajac dla nmiego userid i photoid       
             }
                 
             return BadRequest("Nie można dodać zdjęcia");
