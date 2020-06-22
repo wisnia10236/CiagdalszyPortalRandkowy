@@ -111,7 +111,7 @@
               <textarea class="form-control" name="friendeWouldDescribeMe" rows="4" [(ngModel)]="user.friendeWouldDescribeMe"></textarea>
           </tab>
           <tab heading="Zdjęcia">
-            <p>Edycja zdjec do zrobienia</p>
+            <app-photos [photos]="user.photos"></app-photos>
           </tab>
         </tabset>
       </div>
