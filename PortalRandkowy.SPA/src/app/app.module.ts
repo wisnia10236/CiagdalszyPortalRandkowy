@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NgxGalleryModule } from 'ngx-gallery';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -76,6 +77,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     TabsModule.forRoot(),
     NgxGalleryModule,
     [RouterModule.forChild(appRoutes)],
+    FileUploadModule,
   ],
   providers: [
     AuthService,
