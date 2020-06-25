@@ -42,6 +42,25 @@ export class PhotosComponent implements OnInit {
       maxFileSize: 10 * 1024 * 1024,
     });
 
+
+    this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };   // po dodaniu zdjec wyswietla sie w galerii te zdj co dodalismy
+
+    this.uploader.onSuccessItem = (item, response, status, headres) => {            //jesli jest sukces po wrzuceniu zdj to ma byc item, response ,status i headers
+      if(response){           //jesli jest odpowiedz to
+        const res: Photo = JSON.parse(response);        //parsujemy do stalej odpowiedz ze zdjecia
+        const photo = {           //przekazujemy z odp do stalej jej dane
+          id: res.id,
+          url: res.url,
+          dateAdded: res.dateAdded,
+          description: res.description,
+          isMain: res.isMain
+        };
+        this.photos.push(photo);        //wysylamy nasza stala do kolekcji zdj (photos) aby on mogl przekazac go do api
+      }
+    };
+
   }
+
+
 
 }
