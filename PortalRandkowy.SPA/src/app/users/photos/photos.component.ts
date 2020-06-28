@@ -3,6 +3,10 @@ import { Photo } from '../../_models/photo';
 import { FileUploader } from 'ng2-file-upload';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/_services/auth.service';
+import { UserService } from 'src/app/_services/user.service';
+import { AlertifyService } from 'src/app/_services/alertify.service';
+import { window } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 @Component({
@@ -18,8 +22,11 @@ export class PhotosComponent implements OnInit {
   hasBaseDropZoneOver: false;
   response: string;
   baseUrl = environment.apiUrl;
+  currentMain: Photo;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private userService: UserService,
+              private alerify: AlertifyService) { }
 
 
 
@@ -61,6 +68,16 @@ export class PhotosComponent implements OnInit {
 
   }
 
+  setMainPhoto(photo: Photo){
+    this.userService.setMainPhoto(this.authService.decodedToken.nameid, photo.id).subscribe(() => {
+      console.log('sukces w chuj glowne zdj');
+      this.currentMain = this.photos.filter(p => p.isMain === true)[0];
+      this.currentMain.isMain = false;
+      photo.isMain = true;
+    },error =>{
+      this.alerify.error(error);
+    });
+  }
 
 
 }
