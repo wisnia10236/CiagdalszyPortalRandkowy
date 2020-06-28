@@ -50,4 +50,9 @@ export class UserEditComponent implements OnInit {
 
   }
 
+  updateMainPhoto(photoUrl)
+  {
+    this.user.photoUrl = photoUrl;
+  }
+
 }

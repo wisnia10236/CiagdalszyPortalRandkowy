@@ -1,12 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { Photo } from '../../_models/photo';
 import { FileUploader } from 'ng2-file-upload';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
-import { window } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { EventEmitter } from '@angular/core';
 
 const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 @Component({
@@ -17,6 +16,8 @@ const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 export class PhotosComponent implements OnInit {
 
   @Input() photos: Photo[];     // musi dostac od useredit zdjecia
+
+  @Output() getUserPhotoChange = new EventEmitter<string>();
 
   uploader: FileUploader;
   hasBaseDropZoneOver: false;
@@ -74,7 +75,8 @@ export class PhotosComponent implements OnInit {
       this.currentMain = this.photos.filter(p => p.isMain === true)[0];
       this.currentMain.isMain = false;
       photo.isMain = true;
-    },error =>{
+      this.getUserPhotoChange.emit(photo.url);
+    }, error => {
       this.alerify.error(error);
     });
   }
