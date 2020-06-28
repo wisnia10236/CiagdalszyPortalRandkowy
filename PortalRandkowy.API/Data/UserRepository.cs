@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PortalRandkowy.API.Models;
+using System.Linq;
 
 namespace PortalRandkowy.API.Data
 {
@@ -29,6 +30,13 @@ namespace PortalRandkowy.API.Data
         {
             var photo = await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
             return photo;
+        }
+
+        public async Task<Photo> GetMainPhotoForUser(int userid)
+        {
+            var photoMain = await _context.Photos.Where(u => u.UserId == userid).FirstOrDefaultAsync(p => p.IsMain);
+            
+            return photoMain;
         }
     }
 }

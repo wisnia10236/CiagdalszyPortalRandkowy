@@ -94,5 +94,34 @@ namespace PortalRandkowy.API.Controllers
             return Ok(photoForReturn);
         }
 
+        [HttpPost("{id}/setMain")]
+        public async Task<IActionResult> SetMainPhoto(int userId, int id)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))       // sprawdzamy czy zgadza sie user(sprawdzamy czy id jest rowny)
+                return Unauthorized();
+            
+            var user = await _repository.GetUser(userId);           //pobieramy z repo uzytkownika
+
+            if(!user.Photos.Any(p => p.Id == id))            //sprawdzamy czy zdjecie jest
+                return Unauthorized();
+            
+            var PhotoFromRepo = await _repository.GetPhoto(id);     //pobieramy z repo zdj
+
+            if(PhotoFromRepo.IsMain)            //sprawdzamy czy zdj jest juz glowne
+                return BadRequest("To jest głowne zdjecie");
+            
+            var currentMainPhoto = await _repository.GetMainPhotoForUser(userId);           //pobieramy aktualne zdj glowne
+
+            currentMainPhoto.IsMain = false;                //zmieniamy go ze nie jest glownym
+
+            PhotoFromRepo.IsMain = true;                    //zdj ktore chcemy aby bylo glownym zmieniamy ze 
+            
+            if (await _repository.SaveAll())
+                return NoContent();
+
+            return BadRequest("Nie mozna ustawic zdj jako glownego");
+
+        }
+
     }
 }
