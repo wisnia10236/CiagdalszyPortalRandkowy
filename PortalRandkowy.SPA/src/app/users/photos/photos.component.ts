@@ -72,10 +72,12 @@ export class PhotosComponent implements OnInit {
   setMainPhoto(photo: Photo){
     this.userService.setMainPhoto(this.authService.decodedToken.nameid, photo.id).subscribe(() => {
       console.log('sukces w chuj glowne zdj');
-      this.currentMain = this.photos.filter(p => p.isMain === true)[0];
-      this.currentMain.isMain = false;
-      photo.isMain = true;
-      this.getUserPhotoChange.emit(photo.url);
+      this.currentMain = this.photos.filter(p => p.isMain === true)[0];     // pobieramy zdj glowne
+      this.currentMain.isMain = false;        // zmieniamy ze jest nie jest
+      photo.isMain = true;        // zastepujemy je tym nowym
+      this.authService.changeUserPhoto(photo.url);        // zmieniamy poprzez change user photo zdj
+      this.authService.currentUser.photoUrl = photo.url;        // podmieniamy przez authservice adres glw zdj na te co wybralismy
+      localStorage.setItem('user', JSON.stringify(this.authService.currentUser));         // zapisujemy to w tokenie
     }, error => {
       this.alerify.error(error);
     });
