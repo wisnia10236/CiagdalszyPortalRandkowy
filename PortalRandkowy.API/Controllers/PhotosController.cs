@@ -123,5 +123,44 @@ namespace PortalRandkowy.API.Controllers
 
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePhoto(int userId , int id)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))       // sprawdzamy czy zgadza sie user(sprawdzamy czy id jest rowny)
+                return Unauthorized();
+            
+            var user = await _repository.GetUser(userId);           //pobieramy z repo uzytkownika
+
+            if(!user.Photos.Any(p => p.Id == id))            //sprawdzamy czy jakiekolwiek zdjecia jest
+                return Unauthorized();
+            
+            var PhotoFromRepo = await _repository.GetPhoto(id);     //pobieramy z repo zdj
+
+            if(PhotoFromRepo.IsMain)            //sprawdzamy czy zdj jest juz glowne
+                return BadRequest("Nie można usunąć zdjęcia głównego");
+
+            
+            if (PhotoFromRepo.public_id != null)            // jesli ma public id
+            {
+                var deleteParams = new DeletionParams(PhotoFromRepo.public_id);     // przekazujemy dla cloudinary jakie zdj ma usunąć przekazując jej public id 
+                var result = _cloudynary.Destroy(deleteParams);    // usuwanie w cloudinary
+
+                if(result.Result == "ok")           // jesli jest git to usuwamy z repo
+                    _repository.Delete(PhotoFromRepo);
+            }
+
+            if (PhotoFromRepo.public_id == null)  
+                _repository.Delete(PhotoFromRepo);
+            
+
+            if (await _repository.SaveAll())            // zapisujemy zmiany jesli ok to wyswietlamy ok jesli nie to badrequest
+                return Ok();
+
+            return BadRequest("Nie udało się usunąć zdjęcia");    
+
+            
+        }
+
+
     }
 }
