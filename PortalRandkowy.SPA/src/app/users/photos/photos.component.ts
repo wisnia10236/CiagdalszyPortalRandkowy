@@ -84,4 +84,17 @@ export class PhotosComponent implements OnInit {
   }
 
 
+  deletePhoto(id: number) {
+    // tslint:disable-next-line:max-line-length
+    this.alerify.confirm('Czy jesteś pewien ,że chcesz usunąć zdjęcie', () => {             // wyswietla nam komunikat i jesli jest jakiś odzew to cos robi
+      this.userService.deletePhoto(this.authService.decodedToken.nameid, id).subscribe(() => {          // i jesli jest odzew to usuwa zdj
+        this.photos.splice(this.photos.findIndex(p => p.id === id), 1);
+        this.alerify.success('zdjecie zostalo w usuniecie');
+      }, error => {
+        this.alerify.error('nie udalo sie usunac zdj');
+      });
+    });
+  }
+
+
 }

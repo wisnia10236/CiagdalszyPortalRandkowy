@@ -25,4 +25,13 @@ message(message: string) {
   alertify.message(message);
 }
 
+// tslint:disable-next-line: max-line-length
+confirm(message: string , okCallBack: () => any) {      // wyswietla nam jakis message i jesli jest odzew (callback) to wyswietla nam go i zatwierdza
+  alertify.confirm(message, (e) => {
+    if (e) {
+      okCallBack();
+    } else {}
+  });
+}
+
 }
