@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -20,10 +20,19 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = new FormGroup({
-      username: new FormControl(),
-      password: new FormControl(),
-      confirmPassword: new FormControl(),
-    });
+      username: new FormControl('Podaj nazwę użytkownika', Validators.required),
+      // tslint:disable-next-line: max-line-length
+      password: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]), // ze jest wymagane oraz ze min to 4 i max to 15
+      confirmPassword: new FormControl('', Validators.required),
+    }, this.passwordMatchWalidator);
+  }
+
+
+  passwordMatchWalidator(fg: FormControl)
+  {
+    return fg.get('password').value === fg.get('confirmPassword').value ? null : { missmatch: true };
+    // tslint:disable-next-line:max-line-length
+    // pobieramy wartosc password i confirm password i sprawdzamy je, jesli sa takie same to zwracamy null jak nie to zwracamy obiekt missmatch
   }
 
   register() {
