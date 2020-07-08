@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = new FormGroup({
-      username: new FormControl('Podaj nazwę użytkownika', Validators.required),
+      username: new FormControl('', Validators.required),
       // tslint:disable-next-line: max-line-length
       password: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]), // ze jest wymagane oraz ze min to 4 i max to 15
       confirmPassword: new FormControl('', Validators.required),
