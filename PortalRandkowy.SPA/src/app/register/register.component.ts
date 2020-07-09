@@ -43,8 +43,7 @@ export class RegisterComponent implements OnInit {
   }
 
 
-  passwordMatchWalidator(fg: FormControl)
-  {
+  passwordMatchWalidator(fg: FormControl) {
     return fg.get('password').value === fg.get('confirmPassword').value ? null : { missmatch: true };
     // pobieramy wartosc password i confirm password i sprawdzamy je, jesli sa takie same to zwracamy null jak nie to zwracamy obiekt missmatch
   }
