@@ -14,8 +14,8 @@
 
 
   <div class="form-group">
-    <input type="date" class="form-control" placeholder="Data Urodzenia"  formControlName="dateOfBirth"
-                [ngClass]="{'is-invalid': registerForm.get('dateOfBirth').errors && registerForm.get('dateOfBirth').touched}">
+    <input type="text" class="form-control" placeholder="Data Urodzenia"  formControlName="dateOfBirth"
+                [ngClass]="{'is-invalid': registerForm.get('dateOfBirth').errors && registerForm.get('dateOfBirth').touched}" bsDatepicker [bsConfig]="bsConfig">
     <div class="invalid-feedback" *ngIf="registerForm.get('dateOfBirth').hasError('required') && registerForm.get('dateOfBirth').touched">
       Data urodzenia jest wymagana
     </div>
