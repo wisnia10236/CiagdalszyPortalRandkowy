@@ -28,7 +28,12 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]],  // ze jest wymagane oraz ze min to 4 i max to 15
-      confirmPassword: ['', Validators.required]
+      confirmPassword: ['', Validators.required],
+      gender: ['female'],
+      dateOfBirth: [null, Validators.required],
+      zodiacSign: ['', Validators.required],
+      city: ['', Validators.required],
+      country: ['', Validators.required],
     }, {validator: this.passwordMatchWalidator});     // dodatkowy walidator dla hasla (sprawdza czy pasuja do siebie hasla)
   }
 
