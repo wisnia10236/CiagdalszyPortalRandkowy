@@ -53,17 +53,24 @@ export class PhotosComponent implements OnInit {
 
     this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };   // po dodaniu zdjec wyswietla sie w galerii te zdj co dodalismy
 
-    this.uploader.onSuccessItem = (item, response, status, headres) => {            //jesli jest sukces po wrzuceniu zdj to ma byc item, response ,status i headers
-      if(response){           //jesli jest odpowiedz to
-        const res: Photo = JSON.parse(response);        //parsujemy do stalej odpowiedz ze zdjecia
-        const photo = {           //przekazujemy z odp do stalej jej dane
+
+    this.uploader.onSuccessItem = (item, response, status, headres) => {            // jesli jest sukces po wrzuceniu zdj to ma byc item, response ,status i headers
+      if(response){           // jesli jest odpowiedz to
+        const res: Photo = JSON.parse(response);        // parsujemy do stalej odpowiedz ze zdjecia
+        const photo = {           // przekazujemy z odp do stalej jej dane
           id: res.id,
           url: res.url,
           dateAdded: res.dateAdded,
           description: res.description,
           isMain: res.isMain
         };
-        this.photos.push(photo);        //wysylamy nasza stala do kolekcji zdj (photos) aby on mogl przekazac go do api
+        this.photos.push(photo);        // wysylamy nasza stala do kolekcji zdj (photos) aby on mogl przekazac go do api
+
+        if (photo.isMain) {
+          this.authService.changeUserPhoto(photo.url);        // zmieniamy poprzez change user photo zdj
+          this.authService.currentUser.photoUrl = photo.url;        // podmieniamy przez authservice adres glw zdj na te co wybralismy
+          localStorage.setItem('user', JSON.stringify(this.authService.currentUser));         // zapisujemy to w tokenie
+        }
       }
     };
 
