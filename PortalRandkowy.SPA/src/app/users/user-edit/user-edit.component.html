@@ -21,19 +21,19 @@
           </div>
           <div>
             <strong>Wiek:</strong>
-            <p>{{user?.age}}</p>
+            <p>{{user.age}}</p>
           </div>
           <div>
             <strong>Lokalizacja:</strong>
-            <p>{{user?.country}}, {{user?.city}}</p>
+            <p>{{user.country}}, {{user?.city}}</p>
           </div>
           <div>
             <strong>Ostatnia aktywność:</strong>
-            <p>{{user?.lastActive}}</p>
+            <p>{{user.lastActive | timeAgo }}</p>
           </div>
           <div>
             <strong>Użytkownik od:</strong>
-            <p>{{user?.created}}</p>
+            <p>{{user.created | date: 'longDate'}}</p>
           </div>
         </div>
         <div class="card-footer">
