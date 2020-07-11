@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PortalRandkowy.API.Data;
 using PortalRandkowy.API.Dtos;
+using PortalRandkowy.API.Helpers;
 
 namespace PortalRandkowy.API.Controllers
 {
-
+    [ServiceFilter(typeof(LogUserActivity))]        // dla calej metody dajemy metode ktora po kazdym wywolaniu bedzie zapisywala godzine (Last Activity)
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]

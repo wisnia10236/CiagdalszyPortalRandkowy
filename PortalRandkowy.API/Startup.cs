@@ -73,6 +73,7 @@ namespace PortalRandkowy.API
                             };
                         })
                         .AddNegotiate();
+            services.AddScoped<LogUserActivity>(); // dodajemy to aby on zapisywal nam ostatnia aktywnosc
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
