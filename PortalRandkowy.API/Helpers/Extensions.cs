@@ -2,6 +2,7 @@ using System.Net.Mime;
 using System;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace PortalRandkowy.API.Helpers
 {
@@ -26,7 +27,11 @@ namespace PortalRandkowy.API.Helpers
         public static void AddPagination(this HttpResponse response , int currentPage, int itemsPerPage, int totalItems, int totalPages)
         {
             var PaginationHeader = new PaginationHeader(currentPage,itemsPerPage,totalItems,totalPages);        // tworzymy obiekt klasy paginationheader o odpowieedziach ... i przekazujemy ja do wartosci
-            response.Headers.Add("Pagination", JsonConvert.SerializeObject(PaginationHeader));          // twozymy obiekt dla headera o nazwie pagination o odpowiedzi paginationheader
+
+            var camelCaseFormatter = new JsonSerializerSettings();
+            camelCaseFormatter.ContractResolver = new CamelCasePropertyNamesContractResolver();     // zmiana na male literki dla paginacji w naglowku
+
+            response.Headers.Add("Pagination", JsonConvert.SerializeObject(PaginationHeader,camelCaseFormatter));          // twozymy obiekt dla headera o nazwie pagination o odpowiedzi paginationheader
             response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
         }
 
