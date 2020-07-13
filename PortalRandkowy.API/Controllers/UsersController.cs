@@ -31,8 +31,6 @@ namespace PortalRandkowy.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-
-
             var users = await _repo.GetUsers();
 
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users); //mapujemy z listy users do kolekcji UserForLIstDto aby wyswietlal nam liste useróww
