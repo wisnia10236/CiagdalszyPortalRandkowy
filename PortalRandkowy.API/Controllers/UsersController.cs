@@ -29,7 +29,8 @@ namespace PortalRandkowy.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams)
+        public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams)     // fromquery daje nam to ze mozemy na URL (users?Number=2) dawac wartosci 
+                                                                                        //dla pol zeby je szytwno wrzucal np ze strona ma byc 2
         {
             var users = await _repo.GetUsers(userParams);
 
