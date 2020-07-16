@@ -46,8 +46,7 @@ export class UserService {
     return this.http.put(this.baseUrl + 'users/' + id , user);   // przekazyjemy dla adresu ... zmiany z appii
   }
 
-  setMainPhoto(userId: number, id: number)
-  {
+  setMainPhoto(userId: number, id: number) {
     return this.http.post(this.baseUrl + 'users/' + userId + '/photos/' + id + '/setMain', {});
 
   }

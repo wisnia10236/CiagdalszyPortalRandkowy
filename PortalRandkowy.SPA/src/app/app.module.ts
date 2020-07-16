@@ -10,6 +10,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NgxGalleryModule } from 'ngx-gallery';
 import { FileUploadModule } from 'ng2-file-upload';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 
 import { AppComponent } from './app.component';
@@ -34,6 +35,7 @@ import { UserEditResolver } from './_resolvers/user-edit.resolver';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { PhotosComponent } from './users/photos/photos.component';
 import { TimeAgoPipe } from './_pipes/time-ago-pipe';
+
 
 
 export function tokenGetter() {
@@ -84,6 +86,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     FileUploadModule,
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),
+    PaginationModule.forRoot(),
   ],
   providers: [
     AuthService,
