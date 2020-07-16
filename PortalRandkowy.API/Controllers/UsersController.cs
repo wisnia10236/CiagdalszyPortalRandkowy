@@ -30,9 +30,23 @@ namespace PortalRandkowy.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams)     // fromquery daje nam to ze mozemy na URL (users?Number=2) dawac wartosci 
-                                                                                        //dla pol zeby je szytwno wrzucal np ze strona ma byc 2
+                                                                                         //dla pol zeby je szytwno wrzucal np ze strona ma byc 2
         {
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);         // (filtrowanie) - pobieranmy id z tokena
+            var userFromRepo = await _repo.GetUser(currentUserId);              // (filtrowanie) - wyszukujemy go
+
+            userParams.UserId = currentUserId;          // (filtrowanie) - przypisujemy go do params
+
+            if (string.IsNullOrEmpty(userParams.Gender))        //  (filtrowanie) - sprawdzamy czy ma gender ustawiony
+            {
+                // (filtrowanie) - przypisujemy mu wyszukanie takie ze jesli jest mezczyzna to wyswietla sie kobiety, jesli nie to kobiety wyswietlaja sie bo jest kobieta
+                userParams.Gender = userFromRepo.Gender == "mezczyzna" ? "kobieta" : "mezczyzna";     
+                 
+            }
+
+
             var users = await _repo.GetUsers(userParams);
+
 
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users); //mapujemy z listy users do kolekcji UserForLIstDto aby wyswietlal nam liste useróww
 
