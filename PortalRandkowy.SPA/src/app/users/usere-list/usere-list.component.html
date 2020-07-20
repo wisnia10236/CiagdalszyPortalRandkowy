@@ -29,6 +29,37 @@
     </div>
 
     <div class="col-lg-10 col-md-8 col-sm-6">
+
+      <div class ="text-center mt-3">
+        <h2> Propozycje dla ciebie - znajezionych pozycji : {{pagination.totalItems}}</h2>
+      </div>
+
+      <form class="form-inline" #form="ngForm" (ngSubmit)="loadUsers()" novalidate>
+        <div class="form-group">
+          <label for="minAge">Wiek od</label>
+          <input type="number" class="form-control ml-1" style="width: 70px;" id="minAge" name="minAge" [(ngModel)]="userParams.minAge">
+        </div>
+        <div class="form-group px-2">
+          <label for="maxAge">Wiek do</label>
+          <input type="number" class="form-control ml-1" style="width: 70px;" id="maxAge" name="maxAge" [(ngModel)]="userParams.maxAge">
+        </div>
+        <div class="form-group px-2">
+          <label for="gender">Płeć:</label>
+          <select class="form-control ml-1" style="width: 130px;" name="gender" id="gender" [(ngModel)]="userParams.gender">
+            <option *ngFor="let genderr of genderList" [value]="genderr.value" >{{genderr.display}}</option>
+          </select>
+        </div>
+        <div class="form-group px-2">
+          <label for="zodiacSign">Znak:</label>
+          <select class="form-control ml-1" style="width: 130px;" name="zodiacSign" id="zodiacSign" [(ngModel)]="userParams.zodiacSign">
+            <option *ngFor="let zodiacSign of zodiacSignList" [value]="zodiacSign.value">{{ zodiacSign.display }}</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Zastosuj filtr</button>
+        <button type="button" class="btn btn-info" style="margin-left: 10px;" (click)="resetFilters()">Zresetuj filtr</button>
+      </form>
+      <br>
+
       <div class="row">
         <div *ngFor="let user of users" class="col-lg-3 col-md-4 col-sm-6 mt-5">
           <app-user-card [user]="user"></app-user-card>

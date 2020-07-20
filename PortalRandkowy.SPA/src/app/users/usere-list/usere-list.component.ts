@@ -12,6 +12,23 @@ import { Pagination, PaginationResult } from 'src/app/_models/pagination';
 })
 export class UsereListComponent implements OnInit {
   users: User[];
+  user: User = JSON.parse(localStorage.getItem('user'));
+  genderList: any[] = [{value: 'mezczyzna', display: 'Mezczyzni'},
+              {value: 'kobieta', display: 'Kobiety'}];
+  zodiacSignList: any[] = [ {value: 'wszystkie', display: 'wszystkie'},
+                  {value: 'Baran', display: 'baran'},
+                  {value: 'Byk', display: 'byk'},
+                  {value: 'Bliźnięta', display: 'bliznieta'},
+                  {value: 'Rak', display: 'rak'},
+                  {value: 'Lew', display: 'lew'},
+                  {value: 'Panna', display: 'panna'},
+                  {value: 'Waga', display: 'waga'},
+                  {value: 'Skorpion', display: 'skorpion'},
+                  {value: 'Strzelec', display: 'strzelec'},
+                  {value: 'Koziorożec', display: 'koziorozec'},
+                  {value: 'Wodnik', display: 'wodnik'},
+                  {value: 'Ryby', display: 'ryby'}];
+  userParams: any = {};
   pagination: Pagination;
 
   constructor(
@@ -25,6 +42,10 @@ export class UsereListComponent implements OnInit {
       this.users = data.users.result;
       this.pagination = data.users.pagination;
     });
+    this.userParams.gender = this.user.gender === 'kobieta' ? 'mezczyzna' : 'kobieta';
+    this.userParams.zodiacSign = 'wszystkie';
+    this.userParams.minAge = 18;
+    this.userParams.maxAge = 100;
   }
 
   pageChanged(event: any): void {
@@ -32,8 +53,16 @@ export class UsereListComponent implements OnInit {
     this.loadUsers();
   }
 
+  resetFilters() {
+    this.userParams.gender = this.user.gender === 'kobieta' ? 'mezczyzna' : 'kobieta';
+    this.userParams.zodiacSign = 'wszystkie';
+    this.userParams.minAge = 18;
+    this.userParams.maxAge = 100;
+    this.loadUsers();
+  }
+
   loadUsers() {
-    this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage)
+    this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams)
       .subscribe((res: PaginationResult<User[]>) => {
         this.users = res.result;
         this.pagination = res.pagination;

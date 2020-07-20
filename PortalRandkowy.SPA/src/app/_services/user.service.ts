@@ -14,7 +14,7 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(page?, itemsPerPage?): Observable<PaginationResult<User[]>> {
+  getUsers(page?, itemsPerPage? , userParams?): Observable<PaginationResult<User[]>> {
 
     const paginationResult: PaginationResult<User[]> = new PaginationResult<User[]>();
     let params = new HttpParams();
@@ -22,6 +22,13 @@ export class UserService {
       params = params.append('pageNumber', page);
       params = params.append('pageSize', itemsPerPage);
 
+    }
+
+    if (userParams != null) {         // sprawdzamy czy strona SPA przyslala man userparams
+      params = params.append('minAge', userParams.minAge);        // jesli tak to przypisujemy params ze SPA a pozniej wysylamy ja do spa
+      params = params.append('maxAge', userParams.maxAge);
+      params = params.append('gender', userParams.gender);
+      params = params.append('zodiacSign', userParams.zodiacSign);
     }
 
     /* pobieranie userow z bazy */

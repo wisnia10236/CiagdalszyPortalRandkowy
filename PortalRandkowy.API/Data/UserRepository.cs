@@ -36,7 +36,7 @@ namespace PortalRandkowy.API.Data
             users = users.Where(u => u.DateOfBirth >= minDate && u.DateOfBirth <= MaxDate); // (filtrowanie) - filtrujemy ludzi ze wzgledu na wiek ktory chcemy zeby pokazywal
             }
 
-            if(userParams.ZodiacSign !=null)
+            if(userParams.ZodiacSign != "wszystkie")
             {
                 users = users.Where(u => u.ZodiacSign == userParams.ZodiacSign);
             }
