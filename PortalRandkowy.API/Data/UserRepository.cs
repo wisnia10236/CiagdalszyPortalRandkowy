@@ -24,7 +24,7 @@ namespace PortalRandkowy.API.Data
 
         public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-            var users = _context.Users.Include(p => p.Photos).AsQueryable();  // sciagamy z bazy danych liste uztk i dolaczamy do nich zdjecia
+            var users = _context.Users.Include(p => p.Photos).OrderByDescending(u => u.LastActive).AsQueryable();  // sciagamy z bazy danych liste uztk i dolaczamy do nich zdjecia + (sortowanie) orderby
 
             users = users.Where(u => u.Id != userParams.UserId);        // (filtrowanie) - odffiltrujemy siebie
             users = users.Where(u => u.Gender == userParams.Gender);    // (filtrowanie) - filtrujemy tak aby wyswietlaly plec przeciwna (mezczyzna - kobieta)
@@ -39,6 +39,21 @@ namespace PortalRandkowy.API.Data
             if(userParams.ZodiacSign != "wszystkie")
             {
                 users = users.Where(u => u.ZodiacSign == userParams.ZodiacSign);
+            }
+
+           
+            if (!string.IsNullOrEmpty(userParams.OrderBy))      // (sortowanie) sprawdzamy czy nie jest pusty jesli cos tam jest to
+            {
+                // (sortowanie) czy wpisany jest w  zmiennej orderby created, jesli tak to sortujemy wedlug utworzonego konta jesli nie to po ostatniej aktywnosci
+                switch (userParams.OrderBy)                     
+                {
+                    case "created":
+                        users = users.OrderByDescending(u => u.Created);
+                        break;
+                    default:
+                        users = users.OrderByDescending(u => u.LastActive);
+                        break;
+                }
             }
 
 
