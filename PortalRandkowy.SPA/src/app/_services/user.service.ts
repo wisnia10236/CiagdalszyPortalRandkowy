@@ -29,6 +29,7 @@ export class UserService {
       params = params.append('maxAge', userParams.maxAge);
       params = params.append('gender', userParams.gender);
       params = params.append('zodiacSign', userParams.zodiacSign);
+      params = params.append('orderBy', userParams.orderBy);
     }
 
     /* pobieranie userow z bazy */

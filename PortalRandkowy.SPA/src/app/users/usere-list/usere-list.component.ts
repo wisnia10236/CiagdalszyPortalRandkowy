@@ -46,6 +46,7 @@ export class UsereListComponent implements OnInit {
     this.userParams.zodiacSign = 'wszystkie';
     this.userParams.minAge = 18;
     this.userParams.maxAge = 100;
+    this.userParams.orderBy = 'lastActive';
   }
 
   pageChanged(event: any): void {
@@ -58,6 +59,7 @@ export class UsereListComponent implements OnInit {
     this.userParams.zodiacSign = 'wszystkie';
     this.userParams.minAge = 18;
     this.userParams.maxAge = 100;
+    this.userParams.orderBy = 'lastActive';
     this.loadUsers();
   }
 
