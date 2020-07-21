@@ -74,5 +74,10 @@ namespace PortalRandkowy.API.Data
             
             return photoMain;
         }
+
+        public async Task<Like> GetLike(int userId, int recipientId)
+        {
+            return await _context.Likes.FirstOrDefaultAsync(u => u.UserLikesId == userId && u.UserIsLikedId == recipientId); // sprawdzamy czy juz uzytk lubi innego uzytk i odwrotnie
+        }
     }
 }
