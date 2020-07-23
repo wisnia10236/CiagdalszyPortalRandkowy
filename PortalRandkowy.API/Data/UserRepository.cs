@@ -29,6 +29,18 @@ namespace PortalRandkowy.API.Data
             users = users.Where(u => u.Id != userParams.UserId);        // (filtrowanie) - odffiltrujemy siebie
             users = users.Where(u => u.Gender == userParams.Gender);    // (filtrowanie) - filtrujemy tak aby wyswietlaly plec przeciwna (mezczyzna - kobieta)
 
+            if(userParams.UserLikes)
+            {
+                var userLikes = await GetUserLikes(userParams.UserId, userParams.UserLikes);    // pobieramy uzytk ktorzy nas lubia
+                users = users.Where(u => userLikes.Contains(u.Id));         // z kolekcji wybieramy uzytk ci ktorzy maja te id
+            }
+
+            if(userParams.UserisLiked)
+            {
+                var userIsLiked = await GetUserLikes(userParams.UserId, userParams.UserLikes);    //  pobieramy uzytk ktorzych uzytk lubi
+                users = users.Where(u => userIsLiked.Contains(u.Id));         // z kolekcji wybieramy uzytk ci ktorzy maja te id
+            }
+
             if(userParams.MinAge != 18 || userParams.MaxAge != 100)     // (filtrowanie) - sprawdzamy czy jest filtracja ze wzgledu na wiek
             {
             var minDate = DateTime.Today.AddYears(-userParams.MaxAge - 1);   // ustalenie roku tak aby nie wyswietlali sie ludzie ponizej 18 roku zycia albo jaki chcemy
@@ -78,6 +90,20 @@ namespace PortalRandkowy.API.Data
         public async Task<Like> GetLike(int userId, int recipientId)
         {
             return await _context.Likes.FirstOrDefaultAsync(u => u.UserLikesId == userId && u.UserIsLikedId == recipientId); // sprawdzamy czy juz uzytk lubi innego uzytk i odwrotnie
+        }
+
+        private async Task<IEnumerable<int>> GetUserLikes(int id, bool userLikes)
+        {
+            var user = await _context.Users.Include(x => x.UserLikes).Include(x => x.UserIsLiked).FirstOrDefaultAsync(u => u.Id == id);
+
+            if(userLikes)               // sprawdzamy czy true to zbieramy uzytk ktorzy go lubia
+            {
+                return user.UserLikes.Where(u => u.UserIsLikedId == id).Select(i => i.UserLikesId);
+            }
+            else
+            {
+                return user.UserIsLiked.Where(u => u.UserLikesId == id).Select(i => i.UserIsLikedId);
+            }
         }
     }
 }

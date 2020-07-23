@@ -19,6 +19,8 @@ namespace PortalRandkowy.API.Helpers
         public int MaxAge { get; set; } = 100;
         public string ZodiacSign { get; set; } = "wszystkie";
         public string OrderBy { get; set; }
+        public bool UserLikes { get; set; } = false;
+        public bool UserisLiked { get; set; } = false;
 
     }
 }
