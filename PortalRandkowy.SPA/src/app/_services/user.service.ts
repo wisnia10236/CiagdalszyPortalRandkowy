@@ -14,7 +14,7 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(page?, itemsPerPage? , userParams?): Observable<PaginationResult<User[]>> {
+  getUsers(page?, itemsPerPage? , userParams?, likesParam?): Observable<PaginationResult<User[]>> {
 
     const paginationResult: PaginationResult<User[]> = new PaginationResult<User[]>();
     let params = new HttpParams();
@@ -22,6 +22,14 @@ export class UserService {
       params = params.append('pageNumber', page);
       params = params.append('pageSize', itemsPerPage);
 
+    }
+
+    if (likesParam === 'UserLikes') {
+      params = params.append('UserLikes', 'true');
+    }
+
+    if (likesParam === 'UserIsLiked') {
+      params = params.append('UserIsLiked', 'true');
     }
 
     if (userParams != null) {         // sprawdzamy czy strona SPA przyslala man userparams

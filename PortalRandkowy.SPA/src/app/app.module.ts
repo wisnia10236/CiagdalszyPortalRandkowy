@@ -36,6 +36,7 @@ import { UserEditResolver } from './_resolvers/user-edit.resolver';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { PhotosComponent } from './users/photos/photos.component';
 import { TimeAgoPipe } from './_pipes/time-ago-pipe';
+import { LikesResolver } from './_resolvers/likes.resolver';
 
 
 
@@ -100,6 +101,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     UserListResolver,
     UserEditResolver,
     PreventUnsavedChanges,
+    LikesResolver,
     { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
   ],
   bootstrap: [AppComponent],
