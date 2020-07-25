@@ -105,5 +105,20 @@ namespace PortalRandkowy.API.Data
                 return user.UserIsLiked.Where(u => u.UserLikesId == id).Select(i => i.UserIsLikedId);
             }
         }
+
+        public async Task<Message> GetMessage(int id)
+        {
+            return await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public Task<PagedList<Message>> GetMessagesForUser()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Message>> GetMessagesThread(int userId, int recipientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
