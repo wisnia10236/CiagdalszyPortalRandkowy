@@ -58,5 +58,7 @@ namespace PortalRandkowy.API.Models
         public ICollection<Photo> Photos { get; set; }      // Zdjęcia użytkownika
         public ICollection<Like> UserLikes { get; set; }    // kolekcja uzytk ktorych lubi
         public ICollection<Like> UserIsLiked { get; set; }  // kolekcja uzytk ktory go lubia
+        public ICollection<Message> MessagesSend { get; set; }  // kolekcja wiadomosci wyslanych
+        public ICollection<Message> MessagesRecived { get; set; }  // kolekcja wiadomosci odebranych
     }
 }

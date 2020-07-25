@@ -11,6 +11,7 @@ namespace PortalRandkowy.API.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Like> Likes { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)         // jesli tabela ma wiele do wielu jak like to musimy je pokazac
         {
@@ -27,6 +28,16 @@ namespace PortalRandkowy.API.Data
                                   .HasForeignKey(u => u.UserLikesId)
                                   .OnDelete(DeleteBehavior.Restrict);  // usuwanie kaskadowe
 
+            builder.Entity<Message>().HasOne(u => u.Sender)         // kazdy z wielu wysylajacych wiadomosc 
+                                     .WithMany(u => u.MessagesSend)     // bedzie mogl wyslac wiele wiadomosci
+                                     .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>().HasOne(u => u.Recipient)         // kazdy z wielu przyjmujacych wiadomosc
+                                     .WithMany(u => u.MessagesRecived)     // bedzie mogl wyslac wiele wiadomosci
+                                     .OnDelete(DeleteBehavior.Restrict);
+
         }
+
+
     }
 }
