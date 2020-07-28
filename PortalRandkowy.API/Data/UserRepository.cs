@@ -111,9 +111,27 @@ namespace PortalRandkowy.API.Data
             return await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public Task<PagedList<Message>> GetMessagesForUser()
+        public async Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams)
         {
-            throw new NotImplementedException();
+            var messages = _context.Messages.Include(u => u.Sender).ThenInclude(p => p.Photos)          
+                                            .Include(u => u.Recipient).ThenInclude(p => p.Photos).AsQueryable();    // z bazy danych pobieramy wartosci wysylajacego + zdj oraz przyjmujacego wiad + zdjecia
+            // w odroznieniu co bedzie MessageContainer to sprawdzamy                                
+            switch (messageParams.MessageContainer)         
+            {
+                case "Inbox" :
+                    messages = messages.Where(u => u.RecipientId == messageParams.UserId);      // sciagawy wiadomosci dla uzytk przyjmujacego
+                    break;
+                case "OutBox" :
+                    messages = messages.Where(u => u.SenderId == messageParams.UserId);     // sciagawy wiadomosci dla uzytk wysylajacego
+                    break;
+                default :
+                    messages = messages.Where(u => u.RecipientId == messageParams.UserId && u.IsRead == false); // sciagawy wiadomosci dla uzytk przyjmujacego i jesli nie jest juz przeczytana
+                    break;
+            }
+
+            messages = messages.OrderByDescending(d => d.DateSend);     // sortujemy po dacie wysylania
+
+            return await PagedList<Message>.CreateListAsync(messages,messageParams.PageNumber,messageParams.PageSize);
         }
 
         public Task<IEnumerable<Message>> GetMessagesThread(int userId, int recipientId)
