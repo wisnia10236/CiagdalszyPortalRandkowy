@@ -8,6 +8,7 @@ using PortalRandkowy.API.Data;
 using PortalRandkowy.API.Dtos;
 using PortalRandkowy.API.Helpers;
 using PortalRandkowy.API.Models;
+using System.Collections.Generic;
 
 namespace PortalRandkowy.API.Controllers
 {
@@ -40,6 +41,20 @@ namespace PortalRandkowy.API.Controllers
                 return NotFound("chuj ci w dupe");
             
             return Ok(messageFromRepo);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMessagesForUser(int userId, [FromQuery] MessageParams messageParams)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))       // sprawdzamy czy zgadza sie user(sprawdzamy czy id jest rowny)
+                return Unauthorized();
+            
+            messageParams.UserId = userId;                      // przekazujemy id uzytk do dto
+            var messegesFromRepo = await _repository.GetMessagesForUser(messageParams);         // pobieramy z repo paginacje
+            var messagesToReturn = _mapper.Map<IEnumerable<MessageToReturnDto>>(messegesFromRepo);          // mapujemy inffo z messagesfromrepo do messagetoreturndto
+
+            Response.AddPagination(messegesFromRepo.CurrentPage, messegesFromRepo.PageSize, messegesFromRepo.TotalCount, messegesFromRepo.TotalPages);      // dodajemy paginacje(stronnicowanie)
+            return Ok(messagesToReturn);
         }
 
         [HttpPost]

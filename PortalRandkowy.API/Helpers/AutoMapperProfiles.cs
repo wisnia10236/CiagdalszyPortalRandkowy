@@ -34,6 +34,9 @@ namespace PortalRandkowy.API.Helpers
             CreateMap<PhotoForCreationDto,Photo>();
             CreateMap<UserForRegisterDto,User>();
             CreateMap<MessageForCreationDto, Message>().ReverseMap();       // zeby dzialalo tez w odwrotna strone
+            CreateMap<Message,MessageToReturnDto>() // for member pokazuje dla mappera co ma mapowac dokladnie czyli dla sender photourl ma zmapowac od usera photo ktore jest main
+                    .ForMember(m => m.SenderPhotoUrl, opt => opt.MapFrom(u => u.Sender.Photos.FirstOrDefault(p => p.IsMain).Url))
+                    .ForMember(m => m.RecipientPhotoUrl, opt => opt.MapFrom(u => u.Recipient.Photos.FirstOrDefault(p => p.IsMain).Url));
         }
     }
 }

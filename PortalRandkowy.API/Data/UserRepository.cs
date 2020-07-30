@@ -121,7 +121,7 @@ namespace PortalRandkowy.API.Data
                 case "Inbox" :
                     messages = messages.Where(u => u.RecipientId == messageParams.UserId);      // sciagawy wiadomosci dla uzytk przyjmujacego
                     break;
-                case "OutBox" :
+                case "Outbox" :
                     messages = messages.Where(u => u.SenderId == messageParams.UserId);     // sciagawy wiadomosci dla uzytk wysylajacego
                     break;
                 default :
