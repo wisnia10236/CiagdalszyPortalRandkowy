@@ -37,6 +37,7 @@ import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { PhotosComponent } from './users/photos/photos.component';
 import { TimeAgoPipe } from './_pipes/time-ago-pipe';
 import { LikesResolver } from './_resolvers/likes.resolver';
+import { MessagesResolver } from './_resolvers/messages.resolver';
 
 
 
@@ -79,7 +80,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
         blacklistedRoutes: ['localhost:5000/api/auth'],
       },
     }),
-    RouterModule.forRoot((appRoutes),{relativeLinkResolution: 'corrected'}),
+    RouterModule.forRoot((appRoutes), { relativeLinkResolution: 'corrected'}),
     BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
@@ -102,6 +103,7 @@ export class CustomHammerConfig extends HammerGestureConfig  {
     UserEditResolver,
     PreventUnsavedChanges,
     LikesResolver,
+    MessagesResolver,
     { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
   ],
   bootstrap: [AppComponent],
