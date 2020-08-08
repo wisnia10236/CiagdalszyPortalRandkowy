@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { Message } from '../_models/message';
 import { Pagination, PaginationResult } from '../_models/pagination';
 import { UserService } from '../_services/user.service';
 import { AuthService } from '../_services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { AlertifyService } from '../_services/alertify.service';
-import { error } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-messages',
@@ -14,7 +13,8 @@ import { error } from '@angular/compiler/src/util';
 })
 export class MessagesComponent implements OnInit {
 
-  messages: Message[];
+  messages: any ;
+
   pagination: Pagination;
   messageContainer = 'Nie przeczytane';
 
@@ -31,14 +31,13 @@ export class MessagesComponent implements OnInit {
   }
 
   loadMessages() {
-    this.userService.getMessages(this.authService.decodedToken.nameid, this.pagination.currentPage, this.pagination.itemsPerPage, this.messages)
-                    .subscribe((res: PaginationResult<Message[]>) => {
-                      this.messages = res.result;
-                      this.pagination = res.pagination;
-                    }, error => {
-                      this.alertify.error(error);
-                    }
-                  );
+    this.userService.getMessages(this.authService.decodedToken.nameid , this.pagination.currentPage, this.pagination.itemsPerPage, this.messages).subscribe(
+      res => {
+        this.messages = res.result;
+        this.pagination = res.pagination;
+      }, (error) => {
+        this.alertify.error(error);
+      });
   }
 
   pageChanged(event: any): void {
