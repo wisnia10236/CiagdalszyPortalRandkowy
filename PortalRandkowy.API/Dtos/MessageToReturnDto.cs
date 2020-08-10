@@ -16,5 +16,6 @@ namespace PortalRandkowy.API.Dtos
         public bool IsRead { get; set; }
         public DateTime? DateRead { get; set; }         // ? opcjonalne,(daje to nam ze narazie jest null ale jak ktos przeczyta wiadomosc to wtedy pojawia sie wartosci kiedy)
         public DateTime DateSend { get; set; }
+        public string MessageContainer { get; set; }
     }
 }

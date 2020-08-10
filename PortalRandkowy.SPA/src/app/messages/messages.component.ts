@@ -13,10 +13,11 @@ import { AlertifyService } from '../_services/alertify.service';
 })
 export class MessagesComponent implements OnInit {
 
-  messages: any ;
+  messages: any;
 
   pagination: Pagination;
   messageContainer = 'Nie przeczytane';
+  flagaOutbox = false;
 
   constructor(private userService: UserService,
               private authService: AuthService,
@@ -31,13 +32,31 @@ export class MessagesComponent implements OnInit {
   }
 
   loadMessages() {
-    this.userService.getMessages(this.authService.decodedToken.nameid , this.pagination.currentPage, this.pagination.itemsPerPage, this.messages).subscribe(
-      res => {
+    this.userService.getMessages(this.authService.decodedToken.nameid , this.pagination.currentPage, this.pagination.itemsPerPage, this.messageContainer)
+    .subscribe( res  => {
         this.messages = res.result;
         this.pagination = res.pagination;
-      }, (error) => {
+
+        if (this.messages[0].messageContainer === 'Outbox') {
+          this.flagaOutbox = true;
+        } else {
+          this.flagaOutbox = false;
+        }
+      }, error => {
         this.alertify.error(error);
       });
+  }
+
+
+  deleteMessage(id: number) {
+    this.alertify.confirm('Czy napewno chcesz to usunac?', () => {
+      this.userService.deleteMessage(id, this.authService.decodedToken.nameid).subscribe( () => {
+        this.messages.splice(this.messages.findIndex(m => m.id === id), 1);
+        this.alertify.success(' udalo sie usunac');
+      }, error => {
+        this.alertify.error('chujowo');
+      })
+    });
   }
 
   pageChanged(event: any): void {

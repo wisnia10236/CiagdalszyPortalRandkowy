@@ -54,6 +54,11 @@ namespace PortalRandkowy.API.Controllers
             var messagesToReturn = _mapper.Map<IEnumerable<MessageToReturnDto>>(messegesFromRepo);          // mapujemy inffo z messagesfromrepo do messagetoreturndto
 
             Response.AddPagination(messegesFromRepo.CurrentPage, messegesFromRepo.PageSize, messegesFromRepo.TotalCount, messegesFromRepo.TotalPages);      // dodajemy paginacje(stronnicowanie)
+            foreach(var message in messagesToReturn)
+            {
+                message.MessageContainer = messageParams.MessageContainer;
+            }
+
             return Ok(messagesToReturn);
         }
 
