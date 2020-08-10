@@ -32,7 +32,7 @@
         <div class="card-footer">
           <div class="btn-group d-flex">
           <button class="btn btn-warning w-100">Lubie</button>
-          <button class="btn btn-primary w-100">Wiadomości</button>
+          <button class="btn btn-primary w-100" (click)="selectTab(5)">Wiadomości</button>
           </div>
         </div>
       </div>
@@ -40,8 +40,8 @@
 
     <div class="col-sm-8">
       <div class="tab-panel">
-        <tabset class="user-tabset">
-          <tab heading="Informacje {{user.username}}">
+        <tabset class="user-tabset" #userTabs>
+          <tab heading="Informacje {{user.username}}" >
             <table class="user-table">
               <tr>
                 <td class="user-table-td"><h5>Wzrost</h5><p>{{user.growth}}</p></td>
