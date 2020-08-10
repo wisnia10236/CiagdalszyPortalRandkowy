@@ -119,13 +119,13 @@ namespace PortalRandkowy.API.Data
             switch (messageParams.MessageContainer)         
             {
                 case "Inbox" :
-                    messages = messages.Where(u => u.RecipientId == messageParams.UserId);      // sciagawy wiadomosci dla uzytk przyjmujacego
+                    messages = messages.Where(u => u.RecipientId == messageParams.UserId && u.RecipientDeleted == false);      // sciagawy wiadomosci dla uzytk przyjmujacego
                     break;
                 case "Outbox" :
-                    messages = messages.Where(u => u.SenderId == messageParams.UserId);     // sciagawy wiadomosci dla uzytk wysylajacego
+                    messages = messages.Where(u => u.SenderId == messageParams.UserId && u.SenderDeleted == false);     // sciagawy wiadomosci dla uzytk wysylajacego
                     break;
                 default :
-                    messages = messages.Where(u => u.RecipientId == messageParams.UserId && u.IsRead == false); // sciagawy wiadomosci dla uzytk przyjmujacego i jesli nie jest juz przeczytana
+                    messages = messages.Where(u => u.RecipientId == messageParams.UserId && u.IsRead == false && u.RecipientDeleted == false); // sciagawy wiadomosci dla uzytk przyjmujacego i jesli nie jest juz przeczytana
                     break;
             }
 

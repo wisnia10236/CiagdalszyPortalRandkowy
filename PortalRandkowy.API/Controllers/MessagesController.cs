@@ -92,10 +92,27 @@ namespace PortalRandkowy.API.Controllers
                 return CreatedAtRoute(nameof(GetMessage), new {id = message.Id, userId = message.SenderId} ,messageToReturn);   // wysylamy to do metody get message z wartosciami id i user id i zwracamy dla systemu messageToReturn
             }
 
-            throw new Exception("Utworzenie wiadomosci nie powiodlo sie");
+            throw new Exception("Utworzenie wiadomosci nie powiodlo sie");   
+        }
 
-
+        [HttpPost("{id}")]
+        public async Task<IActionResult> DeleteMessage(int id, int userId)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))       // sprawdzamy czy zgadza sie user(sprawdzamy czy id jest rowny)
+                return Unauthorized();
             
+            var messageFromRepo = await _repository.GetMessage(id);
+
+            if(messageFromRepo.SenderId == userId)
+                messageFromRepo.SenderDeleted = true;
+            if(messageFromRepo.RecipientId == userId)
+                messageFromRepo.RecipientDeleted = true;
+            if(messageFromRepo.SenderDeleted && messageFromRepo.RecipientDeleted)
+                _repository.Delete(messageFromRepo);
+
+            if(await _repository.SaveAll())
+                return NoContent();
+            throw new Exception("Błąd podczas usuwania wiadomosci");
         }
 
     }
