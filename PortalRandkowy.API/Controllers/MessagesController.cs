@@ -70,7 +70,8 @@ namespace PortalRandkowy.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateMessage(int userId, MessageForCreationDto messageForCreationDto)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))       // sprawdzamy czy zgadza sie user(sprawdzamy czy id jest rowny)
+            var sender = await _repository.GetUser(userId);
+            if (sender.Id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))       // sprawdzamy czy zgadza sie user(sprawdzamy czy id jest rowny)
                 return Unauthorized();
             
             messageForCreationDto.SenderId = userId;        // wrzucamy do dto id usera
@@ -83,10 +84,13 @@ namespace PortalRandkowy.API.Controllers
 
             _repository.Add(message);       // dodajemy do bazy nasza wiadomosc
 
-            var messageToReturn = _mapper.Map<MessageForCreationDto>(message);
+            
 
-            if(await _repository.SaveAll())                 // zapisujemy na bazie 
+            if(await _repository.SaveAll())
+            {                 // zapisujemy na bazie 
+                var messageToReturn = _mapper.Map<MessageToReturnDto>(message);
                 return CreatedAtRoute(nameof(GetMessage), new {id = message.Id, userId = message.SenderId} ,messageToReturn);   // wysylamy to do metody get message z wartosciami id i user id i zwracamy dla systemu messageToReturn
+            }
 
             throw new Exception("Utworzenie wiadomosci nie powiodlo sie");
 
