@@ -15,5 +15,6 @@ namespace PortalRandkowy.API.Models
         public DateTime DateSend { get; set; }
         public bool SenderDeleted { get; set; }
         public bool RecipientDeleted { get; set; }
+        
     }
 }

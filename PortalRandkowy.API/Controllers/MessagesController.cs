@@ -120,6 +120,25 @@ namespace PortalRandkowy.API.Controllers
             throw new Exception("Błąd podczas usuwania wiadomosci");
         }
 
+        [HttpPost("{id}/read")]
+        public async Task<IActionResult> MarkMessageAsRead(int userId, int id)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))       // sprawdzamy czy zgadza sie user(sprawdzamy czy id jest rowny)
+                return Unauthorized();
+
+            var message = await _repository.GetMessage(id);
+
+            if(message.RecipientId != userId)
+                return Unauthorized();
+            
+            message.IsRead = true;
+            message.DateRead = DateTime.Now;
+
+            if(await _repository.SaveAll())
+                return NoContent();
+            throw new Exception("Błąd");
+        }
+
     }
 
 }

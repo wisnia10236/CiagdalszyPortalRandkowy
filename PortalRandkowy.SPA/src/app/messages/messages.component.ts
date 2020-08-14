@@ -14,7 +14,6 @@ import { AlertifyService } from '../_services/alertify.service';
 export class MessagesComponent implements OnInit {
 
   messages: any;
-
   pagination: Pagination;
   messageContainer = 'Nie przeczytane';
   flagaOutbox = false;
@@ -33,7 +32,7 @@ export class MessagesComponent implements OnInit {
 
   loadMessages() {
     this.userService.getMessages(this.authService.decodedToken.nameid , this.pagination.currentPage, this.pagination.itemsPerPage, this.messageContainer)
-    .subscribe( res  => {
+    .subscribe( res => {
         this.messages = res.result;
         this.pagination = res.pagination;
 
