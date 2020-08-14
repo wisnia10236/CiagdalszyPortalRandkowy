@@ -26,7 +26,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             return throwError(applicationError);
           }
 
-          const serverError = error.error.errors; // dla errora(httpErrorResponse) przekazujemy parametr error dla tablic errors
+          const serverError = error.error; // dla errora(httpErrorResponse) przekazujemy parametr error dla tablic errors
           let errors = "";
 
           if (serverError && typeof serverError === "object") {
