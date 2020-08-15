@@ -104,23 +104,30 @@ namespace PortalRandkowy.API
 
             seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-            app.UseRouting();
             app.UseAuthentication();
+            app.UseRouting();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            
             app.UseAuthorization();
-            app.UseMvc();
+            
+            
+           
+            
             app.UseStatusCodePages();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
+                endpoints.MapControllerRoute(name:"spa", pattern: "{controller=Fallback}/{action=Index}");
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
 
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-            app.UseHttpsRedirection();
-
+           
+            app.UseMvc();
 
 
         }
