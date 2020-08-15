@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using PortalRandkowy.API.Helpers;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace PortalRandkowy.API
 {
@@ -38,7 +39,7 @@ namespace PortalRandkowy.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(x => x.UseMySql("Server=localhost; Database=PortalRandkowy; Uid=appuser;Pwd=kcmw96312").EnableDetailedErrors());
             services.AddMvc().AddMvcOptions(opt =>
                 {
                     opt.EnableEndpointRouting = false;
@@ -75,6 +76,47 @@ namespace PortalRandkowy.API
                         .AddNegotiate();
             services.AddScoped<LogUserActivity>(); // dodajemy to aby on zapisywal nam ostatnia aktywnosc
         }
+
+        // public void ConfigureDevelopmentServices(IServiceCollection services)       // configuracja dla developmentu
+        // {
+        //     services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+        //     services.AddMvc().AddMvcOptions(opt =>
+        //         {
+        //             opt.EnableEndpointRouting = false;
+        //         })
+        //         .AddNewtonsoftJson(opt =>
+        //         {
+        //             opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        //         });
+        //     services.AddCors();
+        //     services.AddAutoMapper(typeof(Startup)); // dodanie automappera
+        //     services.AddTransient<Seed>(); // dodanie testowych wartosci do db
+        //     services.AddScoped<IAuthRepository, AuthRepository>();
+        //     services.AddScoped<IGenericRepository, GenericRepository>(); // rejestrowanie wstrzykiwania jezeli uzyjemy interfejsu to z automatu wstrzykanie nam klase jakas tam ktora jest podana
+        //     services.AddScoped<IUserRepository, UserRepository>();
+        //     services.Configure<ClaudinarySettings>(Configuration.GetSection("ClaudinarySettings"));  // dodajemy konfig dla claoudinary settings dla sekscji w appsetings ClaudinarySett...
+        //     services.AddAuthentication(x =>
+        //     {
+        //         x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        //         x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        //     })
+        //                 .AddJwtBearer(options =>
+        //                 {
+        //                     options.RequireHttpsMetadata = false;
+        //                     options.SaveToken = true;
+        //                     options.TokenValidationParameters = new TokenValidationParameters
+        //                     {
+        //                         ValidateIssuerSigningKey = true,
+        //                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+        //                         ValidateIssuer = false,
+        //                         ValidateAudience = false,
+        //                         ValidateLifetime = true
+        //                     };
+        //                 })
+        //                 .AddNegotiate();
+        //     services.AddScoped<LogUserActivity>(); // dodajemy to aby on zapisywal nam ostatnia aktywnosc
+        // }
+        
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seed seeder)
